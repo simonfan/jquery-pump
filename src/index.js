@@ -15,28 +15,15 @@ define(function (require, exports, module) {
 		$          = require('jquery'),
 		jqMetaData = require('jquery-meta-data');
 
-	var msSplitter = /\s*:\s*/g;
-
-	/**
-	 * Parses a string into methodName and args.
-	 * @param  {[type]} str [description]
-	 * @return {[type]}     [description]
-	 */
-	function parseMethodString(str) {
-
-		var tokens = str.split(msSplitter);
-
-		var method = tokens.shift();
-
-		return {
-			method: method,
-			args  : tokens
-		};
-	}
-
 
 	var _jqPump = module.exports = pump.extend({
 
+		/**
+		 * [initialize description]
+		 * @param  {[type]} source  [description]
+		 * @param  {[type]} options [description]
+		 * @return {[type]}         [description]
+		 */
 		initialize: function initializeJqPump(source, options) {
 
 
@@ -69,9 +56,16 @@ define(function (require, exports, module) {
 			}, this);
 		},
 
-
+		/**
+		 * Prefix of the binding data attribute
+		 * @type {String}
+		 */
 		prefix: 'pipe',
 
+		/**
+		 * Options for the metadata reader.
+		 * @type {Object}
+		 */
 		metaDataOptions: {
 			parse: function parsePipeDestinations(destinations) {
 
@@ -79,41 +73,18 @@ define(function (require, exports, module) {
 				return destinations.split(/\s*,\s*/g);
 			},
 		},
-
-
-		/**
-		 * Get from the jquery object
-		 *
-		 * @param  {[type]} $el [description]
-		 * @param  {[type]} methodString        [description]
-		 * @return {[type]}             [description]
-		 */
-		destGet: function destGet($el, methodString) {
-			// arguments = [$el, methodString]
-			var parsed = parseMethodString(methodString);
-
-			return $el[parsed.method].apply($el, parsed.args);
-		},
-
-		/**
-		 * Set to the jquery object
-		 * @param  {[type]} $el [description]
-		 * @param  {[type]} methodString        [description]
-		 * @param  {[type]} value       [description]
-		 * @return {[type]}             [description]
-		 */
-		destSet: function destSet($el, methodString, value) {
-			var parsed = parseMethodString(methodString),
-				args   = parsed.args;
-
-			args.push(value);
-
-			return $el[parsed.method].apply($el, args);
-		},
-
 	});
 
+	// assign getter setters.
+	_jqPump.assignProto(require('./__jquery-pump/getter-setter'));
 
+	/**
+	 * Creates a pump that has the $selection as destination.
+	 *
+	 * @param  {[type]} source  [description]
+	 * @param  {[type]} options [description]
+	 * @return {[type]}         [description]
+	 */
 	$.prototype.pump = function jqPump(source, options) {
 
 		options = options || {};

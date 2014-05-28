@@ -24,41 +24,40 @@
 		type="text"
 
 		data-pipe-title="val"
-	></div>
+	>
 
 
 
 	<!-- checkboxes -->
-	<input
-		id="d"
-		name="items"
-
-		type="checkbox"
-
-		value="D"
-
-		data-pipe-items="value"
+	<div
+		id="checkboxes"
+		data-pipe-items='input[name="items"]|value'
 	>
-	<input
-		id="e"
-		name="items"
+		<input
+			id="d"
+			name="items"
 
-		type="checkbox"
+			type="checkbox"
 
-		value="E"
+			value="D"
+		>
+		<input
+			id="e"
+			name="items"
 
-		data-pipe-items="value"
-	>
-	<input
-		id="f"
-		name="items"
+			type="checkbox"
 
-		type="checkbox"
+			value="E"
+		>
+		<input
+			id="f"
+			name="items"
 
-		value="F"
+			type="checkbox"
 
-		data-pipe-items="value"
-	>
+			value="F"
+		>
+	</div>
 
 
 </div>

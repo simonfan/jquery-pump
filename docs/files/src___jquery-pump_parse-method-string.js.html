@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src/index.js - jquery-pump</title>
+    <title>src/__jquery-pump/parse-method-string.js - jquery-pump</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -82,7 +82,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: src/index.js</h1>
+                        <h1 class="file-heading">File: src/__jquery-pump/parse-method-string.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
@@ -99,86 +99,44 @@
 define(function (require, exports, module) {
 	&#x27;use strict&#x27;;
 
-	var pump       = require(&#x27;pump&#x27;),
-		$          = require(&#x27;jquery&#x27;),
-		jqMetaData = require(&#x27;jquery-meta-data&#x27;);
-
-
-	var _jqPump = module.exports = pump.extend({
-
-		/**
-		 * [initialize description]
-		 * @param  {[type]} source  [description]
-		 * @param  {[type]} options [description]
-		 * @return {[type]}         [description]
-		 */
-		initialize: function initializeJqPump(source, options) {
-
-
-			// set default options
-			options = options || {};
-
-			// the $el is always the destination of the pump
-			var $el = options.destination;
-
-			// set metadata options default values
-			_.defaults(options, this.metaDataOptions);
-			_.defaults(options, { prefix: this.prefix });
-
-			// initialize the pump
-			pump.prototype.initialize.call(this, source);
-
-			// PIPES
-			// build one pipe for each element.
-			_.each($el, function (el) {
-
-				var $el      = $(el),
-					pipeData = $el.metaData(options);
-
-					// build pipe
-				var pipe = this.pipe(pipeData);
-
-					// set pipe destination
-				pipe.to($el);
-
-			}, this);
-		},
-
-		/**
-		 * Prefix of the binding data attribute
-		 * @type {String}
-		 */
-		prefix: &#x27;pipe&#x27;,
-
-		/**
-		 * Options for the metadata reader.
-		 * @type {Object}
-		 */
-		metaDataOptions: {
-			parse: function parsePipeDestinations(destinations) {
-
-				// split destinations string into array.
-				return destinations.split(/\s*,\s*/g);
-			},
-		},
-	});
-
-	// assign getter setters.
-	_jqPump.assignProto(require(&#x27;./__jquery-pump/getter-setter&#x27;));
+	var colonSplitter = /\s*:\s*/g;
 
 	/**
-	 * Creates a pump that has the $selection as destination.
+	 * [0] full string
+	 * [1] the selector
+	 * [2] method string
 	 *
-	 * @param  {[type]} source  [description]
-	 * @param  {[type]} options [description]
-	 * @return {[type]}         [description]
+	 * @type {RegExp}
 	 */
-	$.prototype.pump = function jqPump(source, options) {
+	var methodStringMatcher = /(?:(.+?)\|)?(.+?)$/;
 
-		options = options || {};
-		options.destination = this;
+	/**
+	 * Parses a string into methodName and args.
+	 * Example string: &#x27;css:background-color&#x27;
+	 *                 &#x27;attr:href&#x27;
+	 *                 &#x27;val&#x27;
+	 * @param  {[type]} str [description]
+	 * @return {[type]}     [description]
+	 */
+	module.exports = function parseMethodString(str) {
+		/**
+		 * [0] full string
+		 * [1] the selector
+		 * [2] method string
+		 */
 
-		return _jqPump(source, options);
+		// parse the strng
+		var match = str.match(methodStringMatcher);
+
+		// parsing out the method string
+		var tokens = match[2].split(colonSplitter),
+			method = tokens.shift();
+
+		return {
+			selector: match[1],
+			method  : method,
+			args    : tokens
+		};
 	};
 });
 

@@ -4,11 +4,25 @@
         "version": "0.0.0"
     },
     "files": {
-        "src/index.js": {
-            "name": "src/index.js",
+        "src/__jquery-pump/getter-setter.js": {
+            "name": "src/__jquery-pump/getter-setter.js",
             "modules": {
                 "jquery-pump": 1
             },
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/__jquery-pump/parse-method-string.js": {
+            "name": "src/__jquery-pump/parse-method-string.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/index.js": {
+            "name": "src/index.js",
+            "modules": {},
             "classes": {},
             "fors": {},
             "namespaces": {}
@@ -22,7 +36,7 @@
             "fors": {},
             "namespaces": {},
             "tag": "module",
-            "file": "src/index.js",
+            "file": "src/__jquery-pump/getter-setter.js",
             "line": 5,
             "description": "AMD module."
         }
@@ -30,26 +44,8 @@
     "classes": {},
     "classitems": [
         {
-            "file": "src/index.js",
-            "line": 20,
-            "description": "Parses a string into methodName and args.",
-            "params": [
-                {
-                    "name": "str",
-                    "description": "[description]",
-                    "type": "[type]"
-                }
-            ],
-            "return": {
-                "description": "[description]",
-                "type": "[type]"
-            },
-            "class": "",
-            "module": "jquery-pump"
-        },
-        {
-            "file": "src/index.js",
-            "line": 84,
+            "file": "src/__jquery-pump/getter-setter.js",
+            "line": 19,
             "description": "Get from the jquery object",
             "params": [
                 {
@@ -71,8 +67,8 @@
             "module": "jquery-pump"
         },
         {
-            "file": "src/index.js",
-            "line": 98,
+            "file": "src/__jquery-pump/getter-setter.js",
+            "line": 34,
             "description": "Set to the jquery object",
             "params": [
                 {
@@ -97,20 +93,139 @@
             },
             "class": "",
             "module": "jquery-pump"
+        },
+        {
+            "file": "src/__jquery-pump/parse-method-string.js",
+            "line": 16,
+            "description": "[0] full string\n[1] the selector\n[2] method string",
+            "type": "{RegExp}",
+            "class": "",
+            "module": "jquery-pump"
+        },
+        {
+            "file": "src/__jquery-pump/parse-method-string.js",
+            "line": 25,
+            "description": "Parses a string into methodName and args.\nExample string: 'css:background-color'\n                'attr:href'\n                'val'",
+            "params": [
+                {
+                    "name": "str",
+                    "description": "[description]",
+                    "type": "[type]"
+                }
+            ],
+            "return": {
+                "description": "[description]",
+                "type": "[type]"
+            },
+            "class": "",
+            "module": "jquery-pump"
+        },
+        {
+            "file": "src/__jquery-pump/parse-method-string.js",
+            "line": 34,
+            "description": "[0] full string\n[1] the selector\n[2] method string",
+            "class": "",
+            "module": "jquery-pump"
+        },
+        {
+            "file": "src/index.js",
+            "line": 21,
+            "description": "[initialize description]",
+            "params": [
+                {
+                    "name": "source",
+                    "description": "[description]",
+                    "type": "[type]"
+                },
+                {
+                    "name": "options",
+                    "description": "[description]",
+                    "type": "[type]"
+                }
+            ],
+            "return": {
+                "description": "[description]",
+                "type": "[type]"
+            },
+            "class": "",
+            "module": "jquery-pump"
+        },
+        {
+            "file": "src/index.js",
+            "line": 59,
+            "description": "Prefix of the binding data attribute",
+            "type": "{String}",
+            "class": "",
+            "module": "jquery-pump"
+        },
+        {
+            "file": "src/index.js",
+            "line": 65,
+            "description": "Options for the metadata reader.",
+            "type": "{Object}",
+            "class": "",
+            "module": "jquery-pump"
+        },
+        {
+            "file": "src/index.js",
+            "line": 81,
+            "description": "Creates a pump that has the $selection as destination.",
+            "params": [
+                {
+                    "name": "source",
+                    "description": "[description]",
+                    "type": "[type]"
+                },
+                {
+                    "name": "options",
+                    "description": "[description]",
+                    "type": "[type]"
+                }
+            ],
+            "return": {
+                "description": "[description]",
+                "type": "[type]"
+            },
+            "class": "",
+            "module": "jquery-pump"
         }
     ],
     "warnings": [
         {
-            "message": "Missing item type\nParses a string into methodName and args.",
-            "line": " src/index.js:20"
-        },
-        {
             "message": "Missing item type\nGet from the jquery object",
-            "line": " src/index.js:84"
+            "line": " src/__jquery-pump/getter-setter.js:19"
         },
         {
             "message": "Missing item type\nSet to the jquery object",
-            "line": " src/index.js:98"
+            "line": " src/__jquery-pump/getter-setter.js:34"
+        },
+        {
+            "message": "Missing item type\n[0] full string\n[1] the selector\n[2] method string",
+            "line": " src/__jquery-pump/parse-method-string.js:16"
+        },
+        {
+            "message": "Missing item type\nParses a string into methodName and args.\nExample string: 'css:background-color'\n                'attr:href'\n                'val'",
+            "line": " src/__jquery-pump/parse-method-string.js:25"
+        },
+        {
+            "message": "Missing item type\n[0] full string\n[1] the selector\n[2] method string",
+            "line": " src/__jquery-pump/parse-method-string.js:34"
+        },
+        {
+            "message": "Missing item type\n[initialize description]",
+            "line": " src/index.js:21"
+        },
+        {
+            "message": "Missing item type\nPrefix of the binding data attribute",
+            "line": " src/index.js:59"
+        },
+        {
+            "message": "Missing item type\nOptions for the metadata reader.",
+            "line": " src/index.js:65"
+        },
+        {
+            "message": "Missing item type\nCreates a pump that has the $selection as destination.",
+            "line": " src/index.js:81"
         }
     ]
 }

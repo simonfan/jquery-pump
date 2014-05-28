@@ -85,6 +85,8 @@
 		});
 
 		it('pump to many', function (testdone) {
+
+			// select all elements within fixture
 			var $all = $('#fixture > *');
 
 			var pump = $all.pump();
@@ -101,16 +103,22 @@
 				.pump()
 				.then(function () {
 
-					var $a          = $all.find('a'),
-						$div        = $all.find('div'),
-						$textInput  = $all.find('input[type="text"]'),
-						$checkboxes = $all.find('input[type="checkbox"]');
+					var $a          = $all.filter('a'),
+						$div        = $all.filter('div'),
+						$textInput  = $all.filter('input[type="text"]'),
+						$checkboxes = $all.filter('#checkboxes').find('input[type="checkbox"]');
 
 					$a.css('top').should.eql('300px');
 					$div.css('bottom').should.eql('400px');
 					$div.html().should.eql('some-other-url');
 
 					$textInput.val().should.eql(source.title);
+
+					// use the usual method to get value from checkboxes.
+					$checkboxes.filter(':checked').val().should.eql('F');
+
+					// use jquery.value to read checkboxes
+					$checkboxes.value().should.eql(['F']);
 
 					testdone();
 				})
