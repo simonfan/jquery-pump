@@ -1,0 +1,116 @@
+{
+    "project": {
+        "name": "jquery-pump",
+        "version": "0.0.0"
+    },
+    "files": {
+        "src/index.js": {
+            "name": "src/index.js",
+            "modules": {
+                "jquery-pump": 1
+            },
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "jquery-pump": {
+            "name": "jquery-pump",
+            "submodules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "src/index.js",
+            "line": 5,
+            "description": "AMD module."
+        }
+    },
+    "classes": {},
+    "classitems": [
+        {
+            "file": "src/index.js",
+            "line": 20,
+            "description": "Parses a string into methodName and args.",
+            "params": [
+                {
+                    "name": "str",
+                    "description": "[description]",
+                    "type": "[type]"
+                }
+            ],
+            "return": {
+                "description": "[description]",
+                "type": "[type]"
+            },
+            "class": "",
+            "module": "jquery-pump"
+        },
+        {
+            "file": "src/index.js",
+            "line": 84,
+            "description": "Get from the jquery object",
+            "params": [
+                {
+                    "name": "$el",
+                    "description": "[description]",
+                    "type": "[type]"
+                },
+                {
+                    "name": "methodString",
+                    "description": "[description]",
+                    "type": "[type]"
+                }
+            ],
+            "return": {
+                "description": "[description]",
+                "type": "[type]"
+            },
+            "class": "",
+            "module": "jquery-pump"
+        },
+        {
+            "file": "src/index.js",
+            "line": 98,
+            "description": "Set to the jquery object",
+            "params": [
+                {
+                    "name": "$el",
+                    "description": "[description]",
+                    "type": "[type]"
+                },
+                {
+                    "name": "methodString",
+                    "description": "[description]",
+                    "type": "[type]"
+                },
+                {
+                    "name": "value",
+                    "description": "[description]",
+                    "type": "[type]"
+                }
+            ],
+            "return": {
+                "description": "[description]",
+                "type": "[type]"
+            },
+            "class": "",
+            "module": "jquery-pump"
+        }
+    ],
+    "warnings": [
+        {
+            "message": "Missing item type\nParses a string into methodName and args.",
+            "line": " src/index.js:20"
+        },
+        {
+            "message": "Missing item type\nGet from the jquery object",
+            "line": " src/index.js:84"
+        },
+        {
+            "message": "Missing item type\nSet to the jquery object",
+            "line": " src/index.js:98"
+        }
+    ]
+}

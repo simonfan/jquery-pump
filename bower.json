@@ -1,0 +1,24 @@
+{
+  "name": "jquery-pump",
+  "main": "built/jquery-pump.js",
+  "version": "0.1.0",
+  "description": "Some module...",
+  "dependencies": {
+    "jquery": "~2.1.1",
+    "pump": "0.1.1",
+    "jquery-selector-data-prefix": "~0.1.0",
+    "jquery-meta-data": "*"
+  },
+  "devDependencies": {
+    "requirejs": "*",
+    "requirejs-text": "*",
+    "underscore": "*",
+    "jquery": "*",
+    "qunit": "*",
+    "jquery-value": "~0.1.1"
+  },
+  "resolutions": {
+    "pump": "0.1.1",
+    "q": "1.0.1"
+  }
+}
