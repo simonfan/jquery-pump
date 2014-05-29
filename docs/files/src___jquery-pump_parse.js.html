@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src/__jquery-pump/getter-setter.js - jquery-pump</title>
+    <title>src/__jquery-pump/parse.js - jquery-pump</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -82,63 +82,58 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: src/__jquery-pump/getter-setter.js</h1>
+                        <h1 class="file-heading">File: src/__jquery-pump/parse.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
-//     jquery-pump
-//     (c) simonfan
-//     jquery-pump is licensed under the MIT terms.
-
-/**
- * AMD module.
- *
- * @module jquery-pump
- */
-
 define(function (require, exports, module) {
 	&#x27;use strict&#x27;;
 
 	var $ = require(&#x27;jquery&#x27;);
 
 
-	var parse = require(&#x27;./parse&#x27;);
+
+
 
 	/**
-	 * Get from the jquery object
-	 *
-	 * @param  {[type]} $el [description]
-	 * @param  {[type]} methodString        [description]
-	 * @return {[type]}             [description]
+	 * Parses a string into methodName and args.
+	 * Example string: &#x27;css:background-color&#x27;
+	 *                 &#x27;attr:href&#x27;
+	 *                 &#x27;val&#x27;
+	 * @param  {[type]} str [description]
+	 * @return {[type]}     [description]
 	 */
-	exports.destGet = function destGet($el, methodString) {
+	var colonSplitter = /\s*:\s*/g;
+	function parseMethodString(str) {
 
-		// arguments = [$el, methodString]
-		var parsed = parse.methodString(methodString),
-			// partial arguments
-			args     = parsed.args;
+		// parsing out the method string
+		var tokens = str.split(colonSplitter),
+			method = tokens.shift();
 
-		return $el[parsed.method].apply($el, parsed.args);
+		return {
+			method  : method,
+			args    : tokens
+		};
 	};
+	exports.methodString = parseMethodString;
 
 	/**
-	 * Set to the jquery object
-	 * @param  {[type]} $el [description]
-	 * @param  {[type]} methodString        [description]
-	 * @param  {[type]} value       [description]
-	 * @return {[type]}             [description]
+	 * Returns optionally destProp string and method string
+	 * [0] full match
+	 * [1] selector
+	 * [2] method string
 	 */
-	exports.destSet = function destSet($el, methodString, value) {
-			// the parsed methodString
-		var parsed   = parse.methodString(methodString),
-			// partial arguments
-			args     = parsed.args;
+	var destPropMatcher = /(?:(.+?)\s*\|)?\s*(.+)\s*/;
+	function parseDestProp(str) {
 
-		// add the value to the arguments array
-		args.push(value);
+		var match = str.match(destPropMatcher);
 
-		return $el[parsed.method].apply($el, args);
+		return {
+			selector    : match[1],
+			methodString: match[2]
+		};
 	};
+	exports.destProp = parseDestProp;
 });
 
     </pre>

@@ -16,10 +16,10 @@
 		define(deps, factory);
 	}
 
-})('test', function(jqPipe, should, $, undefined) {
+})('test', function(jqPump, should, $, undefined) {
 	'use strict';
 
-	describe('jqPipe basics', function () {
+	describe('jqPump basics', function () {
 		beforeEach(function () {
 			this.$a = $('#a');
 		});
@@ -73,7 +73,7 @@
 
 			toFixture
 				.from(source)
-				.drain()
+				.drain($a)
 				.then(function () {
 
 					source.top.should.eql('235px');

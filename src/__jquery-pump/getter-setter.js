@@ -14,7 +14,7 @@ define(function (require, exports, module) {
 	var $ = require('jquery');
 
 
-	var parseMethodString = require('./parse-method-string');
+	var parse = require('./parse');
 
 	/**
 	 * Get from the jquery object
@@ -26,7 +26,9 @@ define(function (require, exports, module) {
 	exports.destGet = function destGet($el, methodString) {
 
 		// arguments = [$el, methodString]
-		var parsed = parseMethodString(methodString);
+		var parsed = parse.methodString(methodString),
+			// partial arguments
+			args     = parsed.args;
 
 		return $el[parsed.method].apply($el, parsed.args);
 	};
@@ -40,17 +42,12 @@ define(function (require, exports, module) {
 	 */
 	exports.destSet = function destSet($el, methodString, value) {
 			// the parsed methodString
-		var parsed   = parseMethodString(methodString),
-			// the selector
-			selector = parsed.selector,
+		var parsed   = parse.methodString(methodString),
 			// partial arguments
 			args     = parsed.args;
 
 		// add the value to the arguments array
 		args.push(value);
-
-		// check if a selector is available
-		$el = (selector) ? $el.find(selector) : $el;
 
 		return $el[parsed.method].apply($el, args);
 	};

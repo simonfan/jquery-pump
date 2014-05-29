@@ -1,0 +1,1 @@
+define(["require","exports","module","jquery"],function(e,t,n){function s(e){var t=e.split(i),n=t.shift();return{method:n,args:t}}function u(e){var t=e.match(o);return{selector:t[1],methodString:t[2]}}var r=e("jquery"),i=/\s*:\s*/g;t.methodString=s;var o=/(?:(.+?)\s*\|)?\s*(.+)\s*/;t.destProp=u});

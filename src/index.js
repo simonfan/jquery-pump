@@ -13,7 +13,10 @@ define(function (require, exports, module) {
 
 	var pump       = require('pump'),
 		$          = require('jquery'),
-		jqMetaData = require('jquery-meta-data');
+		jqMetaData = require('jquery-meta-data'),
+		_          = require('lodash');
+
+	var buildPipes = require('./__jquery-pump/build-pipes');
 
 
 	var _jqPump = module.exports = pump.extend({
@@ -40,20 +43,8 @@ define(function (require, exports, module) {
 			// initialize the pump
 			pump.prototype.initialize.call(this, source);
 
-			// PIPES
-			// build one pipe for each element.
-			_.each($el, function (el) {
-
-				var $el      = $(el),
-					pipeData = $el.metaData(options);
-
-					// build pipe
-				var pipe = this.pipe(pipeData);
-
-					// set pipe destination
-				pipe.to($el);
-
-			}, this);
+			// build pipes
+			buildPipes.call(this, $el, options);
 		},
 
 		/**
@@ -73,10 +64,27 @@ define(function (require, exports, module) {
 				return destinations.split(/\s*,\s*/g);
 			},
 		},
+
+		/**
+		 * Overwrite drain to get the id automatically from jqeury elements
+		 *
+		 * @param  {[type]} source   [description]
+		 * @param  {[type]} options) {		options   = options || {};		options.destination = this;		return _jqPump(source, options);	};} [description]
+		 * @return {[type]}          [description]
+		 */
+		drain: function jqPumpDrain(id, properties, force) {
+
+			// id may be actually a jquery object
+			id = (id instanceof $) ? id.data(this.pipeIdDataAttribute) : id;
+
+			return pump.prototype.drain.call(this, id, properties, force);
+		},
 	});
 
 	// assign getter setters.
-	_jqPump.assignProto(require('./__jquery-pump/getter-setter'));
+	_jqPump
+		.assignProto(require('./__jquery-pump/getter-setter'))
+		.assignProto(require('./__jquery-pump/id'));
 
 	/**
 	 * Creates a pump that has the $selection as destination.

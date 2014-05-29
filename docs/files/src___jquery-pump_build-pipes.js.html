@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>src/__jquery-pump/parse-method-string.js - jquery-pump</title>
+    <title>src/__jquery-pump/build-pipes.js - jquery-pump</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -82,61 +82,134 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: src/__jquery-pump/parse-method-string.js</h1>
+                        <h1 class="file-heading">File: src/__jquery-pump/build-pipes.js</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
-//     jquery-pump
-//     (c) simonfan
-//     jquery-pump is licensed under the MIT terms.
-
-/**
- * AMD module.
- *
- * @module jquery-pump
- */
-
 define(function (require, exports, module) {
 	&#x27;use strict&#x27;;
 
-	var colonSplitter = /\s*:\s*/g;
+	var $ = require(&#x27;jquery&#x27;),
+		_ = require(&#x27;lodash&#x27;);
+
+	var parse = require(&#x27;./parse&#x27;);
+
+
 
 	/**
-	 * [0] full string
-	 * [1] the selector
-	 * [2] method string
+	 * Builds a single pipe.
 	 *
-	 * @type {RegExp}
-	 */
-	var methodStringMatcher = /(?:(.+?)\|)?(.+?)$/;
-
-	/**
-	 * Parses a string into methodName and args.
-	 * Example string: &#x27;css:background-color&#x27;
-	 *                 &#x27;attr:href&#x27;
-	 *                 &#x27;val&#x27;
-	 * @param  {[type]} str [description]
+	 * @param  {[type]} map [description]
+	 * @param  {[type]} $el [description]
 	 * @return {[type]}     [description]
 	 */
-	module.exports = function parseMethodString(str) {
-		/**
-		 * [0] full string
-		 * [1] the selector
-		 * [2] method string
-		 */
+	function buildPipe(map, $el) {
 
-		// parse the strng
-		var match = str.match(methodStringMatcher);
+			// generate pipeId
+		var pipeId = this.generatePipeId($el);
 
-		// parsing out the method string
-		var tokens = match[2].split(colonSplitter),
-			method = tokens.shift();
+		// set pipeId to the $el as a data attribute
+		$el.data(this.pipeIdDataAttribute, pipeId);
 
-		return {
-			selector: match[1],
-			method  : method,
-			args    : tokens
-		};
+		// create pipe and set its destination
+		var pipe = this.pipe(pipeId, map).to($el);
+
+		return pipe;
+	}
+
+	/**
+	 * [pipes description]
+	 * @param  {[type]} map [description]
+	 * @return {[type]}     [description]
+	 *
+	 *
+	 * $mainEl:
+	 * {
+	 *   from: &#x27;to:method&#x27;,
+	 *   prop: &#x27;.selector|to:method:arg&#x27;  -&gt; is a new el.
+	 *   another: &#x27;.another-selector|to:method:arg&#x27; -&gt; another el
+	 *   fromprop: &#x27;toprop&#x27;
+	 * }
+	 *
+	 * results in:
+	 * {
+	 *   pipe1: {
+	 *     destination: $mainEl,
+	 *     map: {
+	 *       from: &#x27;to:method&#x27;,
+	 *       frmprop: &#x27;toprop&#x27;
+	 *     }
+	 *   },
+	 *   pipe2: {
+	 *     destination: $mainEl.find(.selector),
+	 *     map: {
+	 *       prop: &#x27;to:method:arg&#x27;
+	 *     }
+	 *   },
+	 *   pipe3: {
+	 *     destination: $mainEl.find(&#x27;.another-selector&#x27;),
+	 *     map: {
+	 *       another: &#x27;to:method:arg&#x27;
+	 *     }
+	 *   }
+	 * }
+	 *
+	 */
+	module.exports = function buildPipes($selection, metaDataOptions) {
+
+		// loop through the $selection
+		_.each($selection, function (el) {
+
+				// $el
+			var $el = $(el),
+				// the map
+				elMap = {};
+
+				// get data
+			var raw = $el.metaData(metaDataOptions);
+
+			// loop through the map
+			_.each(raw, function (destProps, srcProp) {
+
+				_.each(destProps, function (destProp) {
+
+
+
+					// check if there is a selector defined
+					var parsedDestProp = parse.destProp(destProp);
+
+					if (parsedDestProp.selector) {
+						// this refers to a $subEl
+
+						// find the $subEl
+						var $subEl  = $el.find(parsedDestProp.selector);
+
+						// build the map
+						var subMap = {};
+						subMap[srcProp] = parsedDestProp.methodString;
+
+						// build pipe
+						buildPipe.call(this, subMap, $subEl);
+
+					} else {
+						// a map property of the $el
+						// [1] check if the prop is in elMap already
+						if (elMap[srcProp]) {
+							elMap[srcProp].push(destProp);
+						} else {
+							elMap[srcProp] = [destProp];
+						}
+					}
+
+				}, this)
+
+			}, this);
+
+			// create main pipe
+			buildPipe.call(this, elMap, $el);
+
+		}, this);
+
 	};
 });
 
