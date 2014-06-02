@@ -106,7 +106,7 @@ module.exports = function (grunt) {
 
 					// exclude these modules AND their dependencies
 					// (excluding your bower dependencies)
-					exclude: ["jquery","pump"],
+					exclude: ["jquery", "jquery-meta-data", "pump"],
 
 					// excludeShallow
 					excludeShallow: [],
@@ -137,7 +137,7 @@ module.exports = function (grunt) {
 
 					// exclude these modules AND their dependencies
 					// (excluding your bower dependencies)
-					exclude: ["jquery","pump"],
+					exclude: ["jquery", "jquery-meta-data", "pump"],
 
 					// excludeShallow
 					excludeShallow: [],
