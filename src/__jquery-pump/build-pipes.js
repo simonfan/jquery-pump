@@ -6,16 +6,6 @@ define(function (require, exports, module) {
 
 	var parse = require('./parse');
 
-
-	function buildGetter($el, format, methodString) {
-
-		var parsedMS = parse.methodString(methodString);
-
-		return function getFrom$el() {
-
-		}
-	}
-
 	/**
 	 * Builds a single pipe.
 	 *
@@ -35,11 +25,6 @@ define(function (require, exports, module) {
 		var pipe = this.pipe(pipeId, map, options).to($el);
 
 		return pipe;
-	}
-
-
-	function buildGetterSetter() {
-
 	}
 
 	/**

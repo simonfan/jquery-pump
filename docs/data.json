@@ -52,7 +52,7 @@
     "classitems": [
         {
             "file": "src/__jquery-pump/build-pipes.js",
-            "line": 19,
+            "line": 9,
             "description": "Builds a single pipe.",
             "params": [
                 {
@@ -74,7 +74,7 @@
         },
         {
             "file": "src/__jquery-pump/build-pipes.js",
-            "line": 45,
+            "line": 30,
             "description": "[pipes description]",
             "params": [
                 {
@@ -91,7 +91,7 @@
         },
         {
             "file": "src/__jquery-pump/getter-setter.js",
-            "line": 17,
+            "line": 30,
             "description": "Get from the jquery object",
             "params": [
                 {
@@ -114,7 +114,7 @@
         },
         {
             "file": "src/__jquery-pump/getter-setter.js",
-            "line": 39,
+            "line": 62,
             "description": "Set to the jquery object",
             "params": [
                 {
@@ -280,19 +280,19 @@
     "warnings": [
         {
             "message": "Missing item type\nBuilds a single pipe.",
-            "line": " src/__jquery-pump/build-pipes.js:19"
+            "line": " src/__jquery-pump/build-pipes.js:9"
         },
         {
             "message": "Missing item type\n[pipes description]",
-            "line": " src/__jquery-pump/build-pipes.js:45"
+            "line": " src/__jquery-pump/build-pipes.js:30"
         },
         {
             "message": "Missing item type\nGet from the jquery object",
-            "line": " src/__jquery-pump/getter-setter.js:17"
+            "line": " src/__jquery-pump/getter-setter.js:30"
         },
         {
             "message": "Missing item type\nSet to the jquery object",
-            "line": " src/__jquery-pump/getter-setter.js:39"
+            "line": " src/__jquery-pump/getter-setter.js:62"
         },
         {
             "message": "Missing item type\nParses a string into methodName and args.\nExample string: 'css:background-color'\n                'attr:href'\n                'val'",

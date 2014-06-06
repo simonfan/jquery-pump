@@ -14,6 +14,19 @@ define(function (require, exports, module) {
 	var $ = require('jquery'),
 		_ = require('lodash');
 
+	function _getFormat(formats, formatName) {
+
+		// get the format specified
+		var format = formats[formatName];
+
+		if (!format) {
+			throw new Error('[jquery-pump|destGet] ' + formatName + ' could not be found on formats hash.');
+		}
+
+		return format;
+	}
+
+
 	/**
 	 * Get from the jquery object
 	 *
@@ -33,7 +46,17 @@ define(function (require, exports, module) {
 		var res = $el[dest.method].apply($el, dest.args);
 
 		// parse result if format is defined
-		return dest.format ? this.formats[dest.format].parse.call(this, res) : res;
+		if (dest.format) {
+
+			// get the format specified
+			var format = _getFormat(this.formats, dest.format);
+
+			// only parse if a parser was defined.
+			return format.parse ? format.parse.call(this, res) : res;
+
+		} else {
+			return res;
+		}
 	};
 
 	/**
@@ -52,7 +75,13 @@ define(function (require, exports, module) {
 		//   - selector (to be ignored)
 
 		// stringify value if format is defined
-		value = dest.format ? this.formats[dest.format].stringify.call(this, value) : value;
+		if (dest.format) {
+			// get format specified
+			var format = _getFormat(this.formats, dest.format);
+
+			// only stringify if stringifier is defined
+			value = format.stringify ? format.stringify.call(this, value) : value;
+		}
 
 		// clone the args array, so that the original one remains untouched
 		var args = _.clone(dest.args);
