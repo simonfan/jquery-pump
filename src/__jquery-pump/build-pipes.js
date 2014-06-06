@@ -7,6 +7,14 @@ define(function (require, exports, module) {
 	var parse = require('./parse');
 
 
+	function buildGetter($el, format, methodString) {
+
+		var parsedMS = parse.methodString(methodString);
+
+		return function getFrom$el() {
+
+		}
+	}
 
 	/**
 	 * Builds a single pipe.
@@ -15,7 +23,7 @@ define(function (require, exports, module) {
 	 * @param  {[type]} $el [description]
 	 * @return {[type]}     [description]
 	 */
-	function buildPipe(map, $el) {
+	function buildPipe($el, map, options) {
 
 			// generate pipeId
 		var pipeId = this.generatePipeId($el);
@@ -24,9 +32,14 @@ define(function (require, exports, module) {
 		$el.data(this.pipeIdDataAttribute, pipeId);
 
 		// create pipe and set its destination
-		var pipe = this.pipe(pipeId, map).to($el);
+		var pipe = this.pipe(pipeId, map, options).to($el);
 
 		return pipe;
+	}
+
+
+	function buildGetterSetter() {
+
 	}
 
 	/**
@@ -38,9 +51,9 @@ define(function (require, exports, module) {
 	 * $mainEl:
 	 * {
 	 *   from: 'to:method',
-	 *   prop: '.selector|to:method:arg'  -> is a new el.
-	 *   another: '.another-selector|to:method:arg' -> another el
-	 *   fromprop: 'toprop'
+	 *   prop: '.selector -> to:method:arg'  -> is a new el.
+	 *   another: '.another-selector->to:method:arg' -> another el
+	 *   fromprop: 'format|toprop'
 	 * }
 	 *
 	 * results in:
@@ -85,8 +98,6 @@ define(function (require, exports, module) {
 
 				_.each(destProps, function (destProp) {
 
-
-
 					// check if there is a selector defined
 					var parsedDestProp = parse.destProp(destProp);
 
@@ -94,22 +105,22 @@ define(function (require, exports, module) {
 						// this refers to a $subEl
 
 						// find the $subEl
-						var $subEl  = $el.find(parsedDestProp.selector);
+						var $subEl = $el.find(parsedDestProp.selector);
 
 						// build the map
 						var subMap = {};
-						subMap[srcProp] = parsedDestProp.methodString;
+						subMap[srcProp] = parsedDestProp;
 
 						// build pipe
-						buildPipe.call(this, subMap, $subEl);
+						buildPipe.call(this, $subEl, subMap);
 
 					} else {
 						// a map property of the $el
 						// [1] check if the prop is in elMap already
 						if (elMap[srcProp]) {
-							elMap[srcProp].push(destProp);
+							elMap[srcProp].push(parsedDestProp);
 						} else {
-							elMap[srcProp] = [destProp];
+							elMap[srcProp] = [parsedDestProp];
 						}
 					}
 
@@ -118,7 +129,7 @@ define(function (require, exports, module) {
 			}, this);
 
 			// create main pipe
-			buildPipe.call(this, elMap, $el);
+			buildPipe.call(this, $el, elMap);
 
 		}, this);
 

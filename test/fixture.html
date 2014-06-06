@@ -26,12 +26,10 @@
 		data-pipe-title="val"
 	>
 
-
-
 	<!-- checkboxes -->
 	<div
 		id="checkboxes"
-		data-pipe-items='input[name="items"]|value'
+		data-pipe-items='input[name="items"]->value'
 	>
 		<input
 			id="d"
@@ -59,5 +57,9 @@
 		>
 	</div>
 
+	<!-- stringify and parse -->
+	<div id="currency" data-pipe-value="currency|data:value, currency|input->val">
+		<input id="currency-input" type="text">
+	</div>
 
 </div>

@@ -4,9 +4,6 @@ define('__jquery-pump/parse',['require','exports','module','jquery'],function (r
 	var $ = require('jquery');
 
 
-
-
-
 	/**
 	 * Parses a string into methodName and args.
 	 * Example string: 'css:background-color'
@@ -35,16 +32,52 @@ define('__jquery-pump/parse',['require','exports','module','jquery'],function (r
 	 * [1] selector
 	 * [2] method string
 	 */
-	var destPropMatcher = /(?:(.+?)\s*\|)?\s*(.+)\s*/;
-	function parseDestProp(str) {
+//	var destPropMatcher = /(?:(.+?)\s*->)?\s*(.+)\s*/;
+//	function parseDestProp(str) {
+//
+//		var match = str.match(destPropMatcher);
+//
+//		return {
+//			selector    : match[1],
+//			methodString: match[2]
+//		};
+//	};
 
+
+	var destPropMatcher = /(?:(.+?)\s*\|)?(?:(.+?)\s*->)?\s*(.+)\s*/;
+	// (?:(.+?)\s*\|)? -> optional format |
+	// (?:(.+?)\s*->)? -> optional selector ->
+	// \s*(.+)\s*/     -> required methodString
+	//
+
+	// 'currency|.selector->attr:value'
+	// 'format|.selector -> method:partial1'
+	// 'currency|html'
+	// 'html'
+	/**
+	 * Parses the destination property of the jquery-pump.
+	 *
+	 * @param  {[type]} str [description]
+	 * @return {[type]}     [description]
+	 */
+	function parseDestProp(str) {
 		var match = str.match(destPropMatcher);
 
+		// match[0] the full matched string
+		// match[1] the format
+		// match[2] the selector
+		// match[3] the methodString
+
+		// parse out the methodString
+		var parsedMethodString = parseMethodString(match[3]);
+
 		return {
-			selector    : match[1],
-			methodString: match[2]
+			format  : match[1],
+			selector: match[2],
+			method  : parsedMethodString.method,
+			args    : parsedMethodString.args
 		};
-	};
+	}
 	exports.destProp = parseDestProp;
 });
 
@@ -57,6 +90,14 @@ define('__jquery-pump/build-pipes',['require','exports','module','jquery','lodas
 	var parse = require('./parse');
 
 
+	function buildGetter($el, format, methodString) {
+
+		var parsedMS = parse.methodString(methodString);
+
+		return function getFrom$el() {
+
+		}
+	}
 
 	/**
 	 * Builds a single pipe.
@@ -65,7 +106,7 @@ define('__jquery-pump/build-pipes',['require','exports','module','jquery','lodas
 	 * @param  {[type]} $el [description]
 	 * @return {[type]}     [description]
 	 */
-	function buildPipe(map, $el) {
+	function buildPipe($el, map, options) {
 
 			// generate pipeId
 		var pipeId = this.generatePipeId($el);
@@ -74,9 +115,14 @@ define('__jquery-pump/build-pipes',['require','exports','module','jquery','lodas
 		$el.data(this.pipeIdDataAttribute, pipeId);
 
 		// create pipe and set its destination
-		var pipe = this.pipe(pipeId, map).to($el);
+		var pipe = this.pipe(pipeId, map, options).to($el);
 
 		return pipe;
+	}
+
+
+	function buildGetterSetter() {
+
 	}
 
 	/**
@@ -88,9 +134,9 @@ define('__jquery-pump/build-pipes',['require','exports','module','jquery','lodas
 	 * $mainEl:
 	 * {
 	 *   from: 'to:method',
-	 *   prop: '.selector|to:method:arg'  -> is a new el.
-	 *   another: '.another-selector|to:method:arg' -> another el
-	 *   fromprop: 'toprop'
+	 *   prop: '.selector -> to:method:arg'  -> is a new el.
+	 *   another: '.another-selector->to:method:arg' -> another el
+	 *   fromprop: 'format|toprop'
 	 * }
 	 *
 	 * results in:
@@ -135,8 +181,6 @@ define('__jquery-pump/build-pipes',['require','exports','module','jquery','lodas
 
 				_.each(destProps, function (destProp) {
 
-
-
 					// check if there is a selector defined
 					var parsedDestProp = parse.destProp(destProp);
 
@@ -144,22 +188,22 @@ define('__jquery-pump/build-pipes',['require','exports','module','jquery','lodas
 						// this refers to a $subEl
 
 						// find the $subEl
-						var $subEl  = $el.find(parsedDestProp.selector);
+						var $subEl = $el.find(parsedDestProp.selector);
 
 						// build the map
 						var subMap = {};
-						subMap[srcProp] = parsedDestProp.methodString;
+						subMap[srcProp] = parsedDestProp;
 
 						// build pipe
-						buildPipe.call(this, subMap, $subEl);
+						buildPipe.call(this, $subEl, subMap);
 
 					} else {
 						// a map property of the $el
 						// [1] check if the prop is in elMap already
 						if (elMap[srcProp]) {
-							elMap[srcProp].push(destProp);
+							elMap[srcProp].push(parsedDestProp);
 						} else {
-							elMap[srcProp] = [destProp];
+							elMap[srcProp] = [parsedDestProp];
 						}
 					}
 
@@ -168,7 +212,7 @@ define('__jquery-pump/build-pipes',['require','exports','module','jquery','lodas
 			}, this);
 
 			// create main pipe
-			buildPipe.call(this, elMap, $el);
+			buildPipe.call(this, $el, elMap);
 
 		}, this);
 
@@ -185,48 +229,60 @@ define('__jquery-pump/build-pipes',['require','exports','module','jquery','lodas
  * @module jquery-pump
  */
 
-define('__jquery-pump/getter-setter',['require','exports','module','jquery','./parse'],function (require, exports, module) {
+define('__jquery-pump/getter-setter',['require','exports','module','jquery','lodash'],function (require, exports, module) {
 	
 
-	var $ = require('jquery');
-
-
-	var parse = require('./parse');
+	var $ = require('jquery'),
+		_ = require('lodash');
 
 	/**
 	 * Get from the jquery object
 	 *
 	 * @param  {[type]} $el [description]
-	 * @param  {[type]} methodString        [description]
+	 * @param  {[type]} dest        [description]
 	 * @return {[type]}             [description]
 	 */
-	exports.destGet = function destGet($el, methodString) {
+	exports.destGet = function destGet($el, dest) {
 
-		// arguments = [$el, methodString]
-		var parsed = parse.methodString(methodString),
-			// partial arguments
-			args     = parsed.args;
+		// dest:
+		//   - method
+		//   - args
+		//   - format
+		//   - selector (to be ignored)
 
-		return $el[parsed.method].apply($el, parsed.args);
+		// get result
+		var res = $el[dest.method].apply($el, dest.args);
+
+		// parse result if format is defined
+		return dest.format ? this.formats[dest.format].parse.call(this, res) : res;
 	};
 
 	/**
 	 * Set to the jquery object
 	 * @param  {[type]} $el [description]
-	 * @param  {[type]} methodString        [description]
+	 * @param  {[type]} dest        [description]
 	 * @param  {[type]} value       [description]
 	 * @return {[type]}             [description]
 	 */
-	exports.destSet = function destSet($el, methodString, value) {
-			// the parsed methodString
-		var parsed   = parse.methodString(methodString),
-			// partial arguments
-			args     = parsed.args;
+	exports.destSet = function destSet($el, dest, value) {
+
+		// dest:
+		//   - method
+		//   - args
+		//   - format
+		//   - selector (to be ignored)
+
+		// stringify value if format is defined
+		value = dest.format ? this.formats[dest.format].stringify.call(this, value) : value;
+
+		// clone the args array, so that the original one remains untouched
+		var args = _.clone(dest.args);
 
 		// add the value to the arguments array
 		args.push(value);
 
-		return $el[parsed.method].apply($el, args);
+		// run the method
+		return $el[dest.method].apply($el, args);
 	};
 });
 
@@ -261,6 +317,9 @@ define('jquery-pump',['require','exports','module','pump','jquery','jquery-meta-
 	var buildPipes = require('./__jquery-pump/build-pipes');
 
 
+	// the name of the geeter and setters
+	var gettersAndSetters = ['destGet', 'destSet', 'srcGet', 'srcSet'];
+
 	var _jqPump = module.exports = pump.extend({
 
 		/**
@@ -282,12 +341,32 @@ define('jquery-pump',['require','exports','module','pump','jquery','jquery-meta-
 			_.defaults(options, this.metaDataOptions);
 			_.defaults(options, { prefix: this.prefix });
 
+			// bind destGet destSet srcGet srcSet
+			_.each(gettersAndSetters, function (method) {
+
+				// only bind if the method is present
+				if (this[method]) {
+					this[method] = _.bind(this[method], this);
+				}
+			}, this);
+
+			// set formats
+			this.formats = options.formats || this.formats;
+
 			// initialize the pump
 			pump.prototype.initialize.call(this, source);
 
 			// build pipes
 			buildPipes.call(this, $el, options);
 		},
+
+		/**
+		 * Hash onto which format objects will be set.
+		 * Format objects may have 'stringify' and/or 'parse' methods,
+		 * used on set to $el and get from $el operations respectively.
+		 * @type {Object}
+		 */
+		formats: {},
 
 		/**
 		 * Prefix of the binding data attribute

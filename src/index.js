@@ -19,6 +19,9 @@ define(function (require, exports, module) {
 	var buildPipes = require('./__jquery-pump/build-pipes');
 
 
+	// the name of the geeter and setters
+	var gettersAndSetters = ['destGet', 'destSet', 'srcGet', 'srcSet'];
+
 	var _jqPump = module.exports = pump.extend({
 
 		/**
@@ -40,12 +43,32 @@ define(function (require, exports, module) {
 			_.defaults(options, this.metaDataOptions);
 			_.defaults(options, { prefix: this.prefix });
 
+			// bind destGet destSet srcGet srcSet
+			_.each(gettersAndSetters, function (method) {
+
+				// only bind if the method is present
+				if (this[method]) {
+					this[method] = _.bind(this[method], this);
+				}
+			}, this);
+
+			// set formats
+			this.formats = options.formats || this.formats;
+
 			// initialize the pump
 			pump.prototype.initialize.call(this, source);
 
 			// build pipes
 			buildPipes.call(this, $el, options);
 		},
+
+		/**
+		 * Hash onto which format objects will be set.
+		 * Format objects may have 'stringify' and/or 'parse' methods,
+		 * used on set to $el and get from $el operations respectively.
+		 * @type {Object}
+		 */
+		formats: {},
 
 		/**
 		 * Prefix of the binding data attribute

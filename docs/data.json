@@ -52,7 +52,7 @@
     "classitems": [
         {
             "file": "src/__jquery-pump/build-pipes.js",
-            "line": 11,
+            "line": 19,
             "description": "Builds a single pipe.",
             "params": [
                 {
@@ -74,7 +74,7 @@
         },
         {
             "file": "src/__jquery-pump/build-pipes.js",
-            "line": 32,
+            "line": 45,
             "description": "[pipes description]",
             "params": [
                 {
@@ -84,14 +84,14 @@
                 }
             ],
             "return": {
-                "description": "[description]\n\n\n$mainEl:\n{\n  from: 'to:method',\n  prop: '.selector|to:method:arg'  -> is a new el.\n  another: '.another-selector|to:method:arg' -> another el\n  fromprop: 'toprop'\n}\n\nresults in:\n{\n  pipe1: {\n    destination: $mainEl,\n    map: {\n      from: 'to:method',\n      frmprop: 'toprop'\n    }\n  },\n  pipe2: {\n    destination: $mainEl.find(.selector),\n    map: {\n      prop: 'to:method:arg'\n    }\n  },\n  pipe3: {\n    destination: $mainEl.find('.another-selector'),\n    map: {\n      another: 'to:method:arg'\n    }\n  }\n}",
+                "description": "[description]\n\n\n$mainEl:\n{\n  from: 'to:method',\n  prop: '.selector -> to:method:arg'  -> is a new el.\n  another: '.another-selector->to:method:arg' -> another el\n  fromprop: 'format|toprop'\n}\n\nresults in:\n{\n  pipe1: {\n    destination: $mainEl,\n    map: {\n      from: 'to:method',\n      frmprop: 'toprop'\n    }\n  },\n  pipe2: {\n    destination: $mainEl.find(.selector),\n    map: {\n      prop: 'to:method:arg'\n    }\n  },\n  pipe3: {\n    destination: $mainEl.find('.another-selector'),\n    map: {\n      another: 'to:method:arg'\n    }\n  }\n}",
                 "type": "[type]"
             },
             "class": ""
         },
         {
             "file": "src/__jquery-pump/getter-setter.js",
-            "line": 19,
+            "line": 17,
             "description": "Get from the jquery object",
             "params": [
                 {
@@ -100,7 +100,7 @@
                     "type": "[type]"
                 },
                 {
-                    "name": "methodString",
+                    "name": "dest",
                     "description": "[description]",
                     "type": "[type]"
                 }
@@ -114,7 +114,7 @@
         },
         {
             "file": "src/__jquery-pump/getter-setter.js",
-            "line": 36,
+            "line": 39,
             "description": "Set to the jquery object",
             "params": [
                 {
@@ -123,7 +123,7 @@
                     "type": "[type]"
                 },
                 {
-                    "name": "methodString",
+                    "name": "dest",
                     "description": "[description]",
                     "type": "[type]"
                 },
@@ -142,7 +142,7 @@
         },
         {
             "file": "src/__jquery-pump/parse.js",
-            "line": 10,
+            "line": 7,
             "description": "Parses a string into methodName and args.\nExample string: 'css:background-color'\n                'attr:href'\n                'val'",
             "params": [
                 {
@@ -160,14 +160,32 @@
         },
         {
             "file": "src/__jquery-pump/parse.js",
-            "line": 32,
+            "line": 29,
             "description": "Returns optionally destProp string and method string\n[0] full match\n[1] selector\n[2] method string",
             "class": "",
             "module": "jquery-pump"
         },
         {
+            "file": "src/__jquery-pump/parse.js",
+            "line": 57,
+            "description": "Parses the destination property of the jquery-pump.",
+            "params": [
+                {
+                    "name": "str",
+                    "description": "[description]",
+                    "type": "[type]"
+                }
+            ],
+            "return": {
+                "description": "[description]",
+                "type": "[type]"
+            },
+            "class": "",
+            "module": "jquery-pump"
+        },
+        {
             "file": "src/index.js",
-            "line": 24,
+            "line": 27,
             "description": "[initialize description]",
             "params": [
                 {
@@ -190,7 +208,15 @@
         },
         {
             "file": "src/index.js",
-            "line": 50,
+            "line": 65,
+            "description": "Hash onto which format objects will be set.\nFormat objects may have 'stringify' and/or 'parse' methods,\nused on set to $el and get from $el operations respectively.",
+            "type": "{Object}",
+            "class": "",
+            "module": "jquery-pump"
+        },
+        {
+            "file": "src/index.js",
+            "line": 73,
             "description": "Prefix of the binding data attribute",
             "type": "{String}",
             "class": "",
@@ -198,7 +224,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 56,
+            "line": 79,
             "description": "Options for the metadata reader.",
             "type": "{Object}",
             "class": "",
@@ -206,7 +232,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 68,
+            "line": 91,
             "description": "Overwrite drain to get the id automatically from jqeury elements",
             "params": [
                 {
@@ -229,7 +255,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 89,
+            "line": 112,
             "description": "Creates a pump that has the $selection as destination.",
             "params": [
                 {
@@ -254,47 +280,55 @@
     "warnings": [
         {
             "message": "Missing item type\nBuilds a single pipe.",
-            "line": " src/__jquery-pump/build-pipes.js:11"
+            "line": " src/__jquery-pump/build-pipes.js:19"
         },
         {
             "message": "Missing item type\n[pipes description]",
-            "line": " src/__jquery-pump/build-pipes.js:32"
+            "line": " src/__jquery-pump/build-pipes.js:45"
         },
         {
             "message": "Missing item type\nGet from the jquery object",
-            "line": " src/__jquery-pump/getter-setter.js:19"
+            "line": " src/__jquery-pump/getter-setter.js:17"
         },
         {
             "message": "Missing item type\nSet to the jquery object",
-            "line": " src/__jquery-pump/getter-setter.js:36"
+            "line": " src/__jquery-pump/getter-setter.js:39"
         },
         {
             "message": "Missing item type\nParses a string into methodName and args.\nExample string: 'css:background-color'\n                'attr:href'\n                'val'",
-            "line": " src/__jquery-pump/parse.js:10"
+            "line": " src/__jquery-pump/parse.js:7"
         },
         {
             "message": "Missing item type\nReturns optionally destProp string and method string\n[0] full match\n[1] selector\n[2] method string",
-            "line": " src/__jquery-pump/parse.js:32"
+            "line": " src/__jquery-pump/parse.js:29"
+        },
+        {
+            "message": "Missing item type\nParses the destination property of the jquery-pump.",
+            "line": " src/__jquery-pump/parse.js:57"
         },
         {
             "message": "Missing item type\n[initialize description]",
-            "line": " src/index.js:24"
+            "line": " src/index.js:27"
+        },
+        {
+            "message": "Missing item type\nHash onto which format objects will be set.\nFormat objects may have 'stringify' and/or 'parse' methods,\nused on set to $el and get from $el operations respectively.",
+            "line": " src/index.js:65"
         },
         {
             "message": "Missing item type\nPrefix of the binding data attribute",
-            "line": " src/index.js:50"
+            "line": " src/index.js:73"
         },
         {
             "message": "Missing item type\nOptions for the metadata reader.",
-            "line": " src/index.js:56"
+            "line": " src/index.js:79"
         },
         {
             "message": "Missing item type\nOverwrite drain to get the id automatically from jqeury elements",
-            "line": " src/index.js:68"
+            "line": " src/index.js:91"
         },
         {
             "message": "Missing item type\nCreates a pump that has the $selection as destination.",
-            "line": " src/index.js:89"
+            "line": " src/index.js:112"
         }
     ]
 }

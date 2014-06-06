@@ -92,9 +92,6 @@ define(function (require, exports, module) {
 	var $ = require(&#x27;jquery&#x27;);
 
 
-
-
-
 	/**
 	 * Parses a string into methodName and args.
 	 * Example string: &#x27;css:background-color&#x27;
@@ -123,16 +120,52 @@ define(function (require, exports, module) {
 	 * [1] selector
 	 * [2] method string
 	 */
-	var destPropMatcher = /(?:(.+?)\s*\|)?\s*(.+)\s*/;
-	function parseDestProp(str) {
+//	var destPropMatcher = /(?:(.+?)\s*-&gt;)?\s*(.+)\s*/;
+//	function parseDestProp(str) {
+//
+//		var match = str.match(destPropMatcher);
+//
+//		return {
+//			selector    : match[1],
+//			methodString: match[2]
+//		};
+//	};
 
+
+	var destPropMatcher = /(?:(.+?)\s*\|)?(?:(.+?)\s*-&gt;)?\s*(.+)\s*/;
+	// (?:(.+?)\s*\|)? -&gt; optional format |
+	// (?:(.+?)\s*-&gt;)? -&gt; optional selector -&gt;
+	// \s*(.+)\s*/     -&gt; required methodString
+	//
+
+	// &#x27;currency|.selector-&gt;attr:value&#x27;
+	// &#x27;format|.selector -&gt; method:partial1&#x27;
+	// &#x27;currency|html&#x27;
+	// &#x27;html&#x27;
+	/**
+	 * Parses the destination property of the jquery-pump.
+	 *
+	 * @param  {[type]} str [description]
+	 * @return {[type]}     [description]
+	 */
+	function parseDestProp(str) {
 		var match = str.match(destPropMatcher);
 
+		// match[0] the full matched string
+		// match[1] the format
+		// match[2] the selector
+		// match[3] the methodString
+
+		// parse out the methodString
+		var parsedMethodString = parseMethodString(match[3]);
+
 		return {
-			selector    : match[1],
-			methodString: match[2]
+			format  : match[1],
+			selector: match[2],
+			method  : parsedMethodString.method,
+			args    : parsedMethodString.args
 		};
-	};
+	}
 	exports.destProp = parseDestProp;
 });
 
