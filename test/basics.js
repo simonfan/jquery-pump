@@ -24,7 +24,7 @@
 			this.$a = $('#a');
 		});
 
-		it('pumpTo jquery element', function (testdone) {
+		it('pumpTo jquery element', function () {
 
 			var $a = this.$a;
 
@@ -37,31 +37,23 @@
 
 			toFixture.from(source);
 
-			toFixture.pump()
-			.then(function () {
+			toFixture.pump();
 
+			$a.css('top').should.eql('100px');
+			$a.attr('href').should.eql('banana');
 
-				$a.css('top').should.eql('100px');
-				$a.attr('href').should.eql('banana');
+			// set values and pump again
+			source.top = '200px';
+			source.url = 'another';
 
-				source.top = '200px';
-				source.url = 'another';
+			toFixture.pump();
 
-				return toFixture.pump();
-
-			})
-			.then(function () {
-
-				$a.css('top').should.eql('200px');
-				$a.attr('href').should.eql('another');
-
-				testdone();
-			})
-			.done();
+			$a.css('top').should.eql('200px');
+			$a.attr('href').should.eql('another');
 
 		});
 
-		it('drainFrom jquery element', function (testdone) {
+		it('drainFrom jquery element', function () {
 			var $a = this.$a;
 
 			$a.attr('href', 'some-url');
@@ -73,18 +65,13 @@
 
 			toFixture
 				.from(source)
-				.drain($a)
-				.then(function () {
+				.drain($a);
 
-					source.top.should.eql('235px');
-					source.url.should.eql('some-url');
-
-					testdone();
-				})
-				.done();
+			source.top.should.eql('235px');
+			source.url.should.eql('some-url');
 		});
 
-		it('pump to many', function (testdone) {
+		it('pump to many', function () {
 
 			// select all elements within fixture
 			var $all = $('#fixture > *');
@@ -100,30 +87,24 @@
 			};
 
 			pump.from(source)
-				.pump()
-				.then(function () {
+				.pump();
 
-					var $a          = $all.filter('a'),
-						$div        = $all.filter('div'),
-						$textInput  = $all.filter('input[type="text"]'),
-						$checkboxes = $all.filter('#checkboxes').find('input[type="checkbox"]');
+			var $a          = $all.filter('a'),
+				$div        = $all.filter('div'),
+				$textInput  = $all.filter('input[type="text"]'),
+				$checkboxes = $all.filter('#checkboxes').find('input[type="checkbox"]');
 
-					$a.css('top').should.eql('300px');
-					$div.css('bottom').should.eql('400px');
-					$div.html().should.eql('some-other-url');
+			$a.css('top').should.eql('300px');
+			$div.css('bottom').should.eql('400px');
+			$div.html().should.eql('some-other-url');
 
-					$textInput.val().should.eql(source.title);
+			$textInput.val().should.eql(source.title);
 
-					// use the usual method to get value from checkboxes.
-					$checkboxes.filter(':checked').val().should.eql('F');
+			// use the usual method to get value from checkboxes.
+			$checkboxes.filter(':checked').val().should.eql('F');
 
-					// use jquery.value to read checkboxes
-					$checkboxes.value().should.eql(['F']);
-
-					testdone();
-				})
-				.done();
-
+			// use jquery.value to read checkboxes
+			$checkboxes.value().should.eql(['F']);
 
 		});
 	});

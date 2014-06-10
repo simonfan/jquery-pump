@@ -21,7 +21,7 @@
 
 	describe('jqPump drain-from-selector-method', function () {
 
-		it('is fine (:', function (testdone) {
+		it('is fine (:', function () {
 
 			var $checkboxesDIV = $('#checkboxes');
 
@@ -30,30 +30,21 @@
 
 			source.items = ['D','E'];
 
-			pump.pump()
-				.then(function () {
+			pump.pump();
 
-					var checked = $checkboxesDIV.find('input[name="items"]').value();
+			var checked = $checkboxesDIV.find('input[name="items"]').value();
 
-					checked.should.eql(['D', 'E']);
-				})
-				.then(function () {
+			checked.should.eql(['D', 'E']);
 
-					// modify source items
-					source.items = ['C'];
+			// modify source items
+			source.items = ['C'];
 
 
-				//	console.log($checkboxesDIV.find('input[name="items"]').data(pump.pipeIdDataAttribute));
+		//	console.log($checkboxesDIV.find('input[name="items"]').data(pump.pipeIdDataAttribute));
 
-					// drain
-					return pump.drain($checkboxesDIV.find('input[name="items"]'));
-				})
-				.then(function () {
-
-					source.items.should.eql(['D', 'E']);
-					testdone();
-				})
-				.done();
+			// drain
+			return pump.drain($checkboxesDIV.find('input[name="items"]'));
+			source.items.should.eql(['D', 'E']);
 		});
 	});
 });

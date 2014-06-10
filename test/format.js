@@ -20,7 +20,7 @@
 	'use strict';
 
 	describe('jqPump format', function () {
-		it('is fine (:', function (testdone) {
+		it('is fine (:', function () {
 
 			var source = {};
 
@@ -45,26 +45,22 @@
 			source.value = 10;
 
 			// pump
-			cPump.pump().then(function (argument) {
+			cPump.pump();
 
-				// check currency
-				$currency.data('value').should.be.exactly('R$10');
+			// check currency
+			$currency.data('value').should.be.exactly('R$10');
 
-				// check currency input
-				$currencyInput.val().should.be.exactly('R$10');
+			// check currency input
+			$currencyInput.val().should.be.exactly('R$10');
 
-				// set value onto input
-				$currencyInput.val('R$ 5000');
+			// set value onto input
+			$currencyInput.val('R$ 5000');
 
-				// drain from it
-				return cPump.drain($currencyInput);
-			})
-			.then(function () {
-				source.value.should.be.exactly(5000);
+			// drain from it
+			return cPump.drain($currencyInput);
 
-				testdone();
-			})
-			.done();
+
+			source.value.should.be.exactly(5000);
 		});
 	});
 });
