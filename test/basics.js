@@ -33,7 +33,7 @@
 				url: 'banana',
 			};
 
-			var toFixture = $a.pump();
+			var toFixture = $('#a').pump();
 
 			toFixture.from(source);
 

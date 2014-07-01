@@ -258,7 +258,7 @@ define('__jquery-pump/getter-setter',['require','exports','module','jquery','lod
 			var format = _getFormat(this.formats, dest.format);
 
 			// only parse if a parser was defined.
-			return format.parse ? format.parse.call(this, res) : res;
+			return format.parse ? format.parse.call(this, res, $el) : res;
 
 		} else {
 			return res;
@@ -286,7 +286,7 @@ define('__jquery-pump/getter-setter',['require','exports','module','jquery','lod
 			var format = _getFormat(this.formats, dest.format);
 
 			// only stringify if stringifier is defined
-			value = format.stringify ? format.stringify.call(this, value) : value;
+			value = format.stringify ? format.stringify.call(this, value, $el) : value;
 		}
 
 		// clone the args array, so that the original one remains untouched
