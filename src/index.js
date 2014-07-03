@@ -52,8 +52,10 @@ define(function (require, exports, module) {
 				}
 			}, this);
 
-			// set formats
+			// save formats
 			this.formats = options.formats || this.formats;
+			// save methods
+			this.methods = options.methods || this.methods;
 
 			// initialize the pump
 			pump.prototype.initialize.call(this, source);
@@ -69,6 +71,14 @@ define(function (require, exports, module) {
 		 * @type {Object}
 		 */
 		formats: {},
+
+		/**
+		 * Hash onto which methods should be set.
+		 * These methods are available for usage on the jquery $el object
+		 * and will be applied into its context.
+		 * @type {Object}
+		 */
+		methods: {},
 
 		/**
 		 * Prefix of the binding data attribute

@@ -114,6 +114,17 @@ define(function (require, exports, module) {
 		return format;
 	}
 
+	function _getMethod($el, methods, methodName) {
+		// get the required method
+		var method = $el[methodName] || methods[methodName];
+
+		if (!method) {
+			throw new Error(&#x27;[jquery-pump|destSet] &#x27; + methodName + &#x27; could not be found.&#x27;)
+		}
+
+		return method;
+	}
+
 
 	/**
 	 * Get from the jquery object
@@ -130,8 +141,11 @@ define(function (require, exports, module) {
 		//   - format
 		//   - selector (to be ignored)
 
+		// get the method
+		var method = _getMethod($el, this.methods, dest.method);
+
 		// get result
-		var res = $el[dest.method].apply($el, dest.args);
+		var res = method.apply($el, dest.args);
 
 		// parse result if format is defined
 		if (dest.format) {
@@ -177,8 +191,11 @@ define(function (require, exports, module) {
 		// add the value to the arguments array
 		args.push(value);
 
+		// get the method
+		var method = _getMethod($el, this.methods, dest.method);
+
 		// run the method
-		return $el[dest.method].apply($el, args);
+		return method.apply($el, args);
 	};
 });
 

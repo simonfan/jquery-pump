@@ -1,7 +1,7 @@
 {
   "name": "jquery-pump",
   "main": "built/jquery-pump.js",
-  "version": "0.4.5",
+  "version": "0.5.5",
   "description": "Some module...",
   "dependencies": {
     "jquery": "~2.1.1",

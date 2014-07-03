@@ -232,6 +232,17 @@ define('__jquery-pump/getter-setter',['require','exports','module','jquery','lod
 		return format;
 	}
 
+	function _getMethod($el, methods, methodName) {
+		// get the required method
+		var method = $el[methodName] || methods[methodName];
+
+		if (!method) {
+			throw new Error('[jquery-pump|destSet] ' + methodName + ' could not be found.')
+		}
+
+		return method;
+	}
+
 
 	/**
 	 * Get from the jquery object
@@ -248,8 +259,11 @@ define('__jquery-pump/getter-setter',['require','exports','module','jquery','lod
 		//   - format
 		//   - selector (to be ignored)
 
+		// get the method
+		var method = _getMethod($el, this.methods, dest.method);
+
 		// get result
-		var res = $el[dest.method].apply($el, dest.args);
+		var res = method.apply($el, dest.args);
 
 		// parse result if format is defined
 		if (dest.format) {
@@ -295,8 +309,11 @@ define('__jquery-pump/getter-setter',['require','exports','module','jquery','lod
 		// add the value to the arguments array
 		args.push(value);
 
+		// get the method
+		var method = _getMethod($el, this.methods, dest.method);
+
 		// run the method
-		return $el[dest.method].apply($el, args);
+		return method.apply($el, args);
 	};
 });
 
@@ -364,8 +381,10 @@ define('jquery-pump',['require','exports','module','pump','jquery','jquery-meta-
 				}
 			}, this);
 
-			// set formats
+			// save formats
 			this.formats = options.formats || this.formats;
+			// save methods
+			this.methods = options.methods || this.methods;
 
 			// initialize the pump
 			pump.prototype.initialize.call(this, source);
@@ -381,6 +400,14 @@ define('jquery-pump',['require','exports','module','pump','jquery','jquery-meta-
 		 * @type {Object}
 		 */
 		formats: {},
+
+		/**
+		 * Hash onto which methods should be set.
+		 * These methods are available for usage on the jquery $el object
+		 * and will be applied into its context.
+		 * @type {Object}
+		 */
+		methods: {},
 
 		/**
 		 * Prefix of the binding data attribute

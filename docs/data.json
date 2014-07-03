@@ -91,7 +91,7 @@
         },
         {
             "file": "src/__jquery-pump/getter-setter.js",
-            "line": 30,
+            "line": 41,
             "description": "Get from the jquery object",
             "params": [
                 {
@@ -114,7 +114,7 @@
         },
         {
             "file": "src/__jquery-pump/getter-setter.js",
-            "line": 62,
+            "line": 76,
             "description": "Set to the jquery object",
             "params": [
                 {
@@ -208,7 +208,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 65,
+            "line": 67,
             "description": "Hash onto which format objects will be set.\nFormat objects may have 'stringify' and/or 'parse' methods,\nused on set to $el and get from $el operations respectively.",
             "type": "{Object}",
             "class": "",
@@ -216,7 +216,15 @@
         },
         {
             "file": "src/index.js",
-            "line": 73,
+            "line": 75,
+            "description": "Hash onto which methods should be set.\nThese methods are available for usage on the jquery $el object\nand will be applied into its context.",
+            "type": "{Object}",
+            "class": "",
+            "module": "jquery-pump"
+        },
+        {
+            "file": "src/index.js",
+            "line": 83,
             "description": "Prefix of the binding data attribute",
             "type": "{String}",
             "class": "",
@@ -224,7 +232,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 79,
+            "line": 89,
             "description": "Options for the metadata reader.",
             "type": "{Object}",
             "class": "",
@@ -232,7 +240,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 91,
+            "line": 101,
             "description": "Overwrite drain to get the id automatically from jqeury elements",
             "params": [
                 {
@@ -255,7 +263,7 @@
         },
         {
             "file": "src/index.js",
-            "line": 112,
+            "line": 122,
             "description": "Creates a pump that has the $selection as destination.",
             "params": [
                 {
@@ -288,11 +296,11 @@
         },
         {
             "message": "Missing item type\nGet from the jquery object",
-            "line": " src/__jquery-pump/getter-setter.js:30"
+            "line": " src/__jquery-pump/getter-setter.js:41"
         },
         {
             "message": "Missing item type\nSet to the jquery object",
-            "line": " src/__jquery-pump/getter-setter.js:62"
+            "line": " src/__jquery-pump/getter-setter.js:76"
         },
         {
             "message": "Missing item type\nParses a string into methodName and args.\nExample string: 'css:background-color'\n                'attr:href'\n                'val'",
@@ -312,23 +320,27 @@
         },
         {
             "message": "Missing item type\nHash onto which format objects will be set.\nFormat objects may have 'stringify' and/or 'parse' methods,\nused on set to $el and get from $el operations respectively.",
-            "line": " src/index.js:65"
+            "line": " src/index.js:67"
+        },
+        {
+            "message": "Missing item type\nHash onto which methods should be set.\nThese methods are available for usage on the jquery $el object\nand will be applied into its context.",
+            "line": " src/index.js:75"
         },
         {
             "message": "Missing item type\nPrefix of the binding data attribute",
-            "line": " src/index.js:73"
+            "line": " src/index.js:83"
         },
         {
             "message": "Missing item type\nOptions for the metadata reader.",
-            "line": " src/index.js:79"
+            "line": " src/index.js:89"
         },
         {
             "message": "Missing item type\nOverwrite drain to get the id automatically from jqeury elements",
-            "line": " src/index.js:91"
+            "line": " src/index.js:101"
         },
         {
             "message": "Missing item type\nCreates a pump that has the $selection as destination.",
-            "line": " src/index.js:112"
+            "line": " src/index.js:122"
         }
     ]
 }
